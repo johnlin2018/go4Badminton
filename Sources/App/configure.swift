@@ -22,6 +22,10 @@ public func configure(
     // 2. add fluentsqlite
     try services.register(FluentSQLiteProvider())
     
+    
+    
+    //dbFilePath.appendPathComponent("go4Badminton.sqlite")
+    
     let sqlite = try SQLiteDatabase(storage: .memory, threadPool: nil)
     
     var databases = DatabasesConfig()

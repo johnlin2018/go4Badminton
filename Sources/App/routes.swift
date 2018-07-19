@@ -15,9 +15,14 @@ public func routes(_ router: Router) throws {
         let content:String = try req.content.syncGet(at: "content")
         
         let msg = Message(id: nil, username: username, content: content, date: Date())
+        // Fluent will fill the id for us automatically
         
         return msg.save(on: req).map(to: Response.self){ _ in
             return req.redirect(to: "/")
+            
+        //            Tip: Both map() and flatMap() are designed to attach work to be run when a future completes. You can’t use the wrong one by mistake – Xcode will refuse to compile. The simple rule is this: if the work you’re attaching returns a future, you should use flatMap(), otherwise use map().
+        //
+
         }
     }
     
