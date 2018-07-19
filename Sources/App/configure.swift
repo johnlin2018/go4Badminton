@@ -1,4 +1,6 @@
 import Vapor
+import Leaf
+import FluentSQLite
 
 /// Called before your application initializes.
 ///
@@ -14,4 +16,20 @@ public func configure(
     services.register(router, as: Router.self)
 
     // Configure the rest of your application here
+    //1. add leaf
+    try services.register(LeafProvider())
+    config.prefer(LeafRenderer.self, for: ViewRenderer.self)
+    // 2. add fluentsqlite
+    try services.register(FluentSQLiteProvider())
+    
+    let sqlite = try SQLiteDatabase(storage: .memory, threadPool: nil)
+    
+    var databases = DatabasesConfig()
+    databases.add(database: sqlite, as: .sqlite)
+    services.register(databases)
+    
+    var migrationConfig = MigrationConfig()
+    migrationConfig.add(model: Message.self, database: .sqlite)
+    services.register(migrationConfig)
+    
 }
